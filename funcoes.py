@@ -1,7 +1,18 @@
 import os
+from datetime import datetime
 
 def limpar_tela ():
     os.system ("cls")
+
+def printar_historico():
+    limpar_tela()
+    arquivo = open("historico.txt","r")
+    conteudo = arquivo.read()
+    print(" Histórico de Partidas:")
+    print("\n"+conteudo)
+    arquivo.close()
+    input("\nPressione ENTER para sair...")
+    limpar_tela()
 
 def menu_apresentacao():
     print('''
@@ -12,7 +23,7 @@ def menu_apresentacao():
 .------------------------------------.
 | BY: Leonardo Walker e Thomás Soldá |
 '------------------------------------' 
---------------------------------------------------------------------------------''')
+''')
 
 def ganhou():
     print('''

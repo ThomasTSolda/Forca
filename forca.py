@@ -1,9 +1,10 @@
-from funcoes import limpar_tela, menu_apresentacao, ganhou, perdeu
+from funcoes import limpar_tela, menu_apresentacao, ganhou, perdeu,printar_historico
 import time
+from datetime import datetime
 
 limpar_tela()
 menu_apresentacao()
-time.sleep(1)
+time.sleep(3)
 limpar_tela()
 
 nome_desafiante = input("Quem vai desafiar? ")
@@ -22,16 +23,14 @@ erros = 0
 letras_certas = []
 limpar_tela()
 
-palavra_escondida = ''
-palavra_escondida = palavra_escondida * len(palavra_chave)
 print("Bem VindoX", nome_desafiado)
-print('\nA palavra escolhida por', nome_desafiante, 'é:', palavra_escondida)
+print("-----------------------------------")
 
 while True:
     key = ''
     for letra in palavra_chave:
         key += letra if letra in letras_certas else "_ "
-    print(key)       
+    print("Acerte a palavra:",key)       
     if key == palavra_chave:
         ganhou()
         break
@@ -68,6 +67,8 @@ Selecione uma opção: ''' )
 
     if tentativa in letras_digitadas:
         print("Você já tentou essa letra!\n")
+        erros -= 1
+        
     else:
          letras_digitadas += tentativa
     
@@ -78,14 +79,15 @@ Selecione uma opção: ''' )
         print ("Essa letra não está na palavra!\n")
 
     if erros >= 6:
-        print('''Voce perdeu!!!!!
-    I==:==
-    I  :
-    I  O
-    I \|/           Enforcado Amigão!
-    I / \ 
-    ===========
+        print('''
+I==:==
+I  :
+I  O         ENFORCADO!        
+I \|/          
+I / \ 
+===========
     ''')
+        time.sleep(2)
         break
 
     print("I==:==\nI  :   ") 
@@ -105,26 +107,61 @@ Selecione uma opção: ''' )
         linha3 = " / \ "
     print("I%s" % linha3)
     print("I\n===========")
-    if erros == 6:
-        print("Enforcado Amigão!")
-        break
+   
 limpar_tela()
 if key == palavra_chave:
-        ganhou()
-        time.sleep(3)
-        limpar_tela()
+    ganhou()
+    time.sleep(3)
+    limpar_tela()
 else:
     perdeu()
     time.sleep(3)
     limpar_tela()
-registro = open("registro.txt","w")
-registro.write("A Palavra chave era: %s \n" % palavra_chave)
 
-if key == palavra_chave:
-    registro.write("O Vencedor foi...: %s \n" % nome_desafiado)
-else:
-    registro.write("O Vencedor foi...: %s \n" % nome_desafiante)
+print("A palavra chave era:",palavra_chave)
     
-registro = open("registro.txt","r")
-conteudo = registro.read()
-print(conteudo)
+try:
+    registro = open("registro.txt","r")
+    conteudo = registro.read()
+    print(conteudo)
+except:
+    registro = open("registro.txt","w")
+
+    if key == palavra_chave:
+        registro.write("O(a) vencedor(a) foi %s" % nome_desafiado)
+    else:
+        registro.write("O(a) vencedor(a) foi %s" % nome_desafiante)
+    conteudo = registro.read()
+    print(conteudo)
+
+input("\nPressione ENTER para continuar...")
+limpar_tela()
+
+historico=[]
+data_atual = datetime.today().strftime('%d/%m/%Y - %H:%M')
+
+arquivo = open("historico.txt","a")
+historico.append (data_atual+" -> "+ nome_desafiante+ " VS " + nome_desafiado+" -> "+ conteudo+" -> "+"Palavra: "+palavra_chave+"\n" )
+arquivo.write(''.join(historico))
+arquivo.close()
+
+
+print ('''(1) Para ver o histórico.
+(2) Para deletar o histórico.
+(0) Para sair.''')
+
+ver_historico = input("\nDigite uma opção:")
+if ver_historico == "1":
+    printar_historico()
+    quit()
+elif ver_historico == "2":
+    del historico
+    arquivo = open("historico.txt","w")
+    arquivo.close()
+    limpar_tela()
+    print("Histórico deletado com sucesso!")
+    time.sleep (2)
+    quit()
+elif ver_historico == "0":
+        limpar_tela()
+        quit()
