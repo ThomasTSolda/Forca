@@ -42,7 +42,6 @@ while True:
 (1) Para a dica 1.
 (2) Para a dica 2.
 (3) Para a dica 3.
-
 Selecione uma opção: ''' )
         if escolher_dica == "1":
             print('\nDica 1: ',dica1)
@@ -67,7 +66,7 @@ Selecione uma opção: ''' )
 
     if tentativa in letras_digitadas:
         print("Você já tentou essa letra!\n")
-        erros -= 1
+        erros = erros
         
     else:
          letras_digitadas += tentativa
@@ -119,18 +118,18 @@ else:
     limpar_tela()
 
 print("A palavra chave era:",palavra_chave)
-    
 try:
-    registro = open("registro.txt","r")
-    conteudo = registro.read()
-    print(conteudo)
-except:
     registro = open("registro.txt","w")
 
     if key == palavra_chave:
         registro.write("O(a) vencedor(a) foi %s" % nome_desafiado)
     else:
         registro.write("O(a) vencedor(a) foi %s" % nome_desafiante)
+    registro = open("registro.txt","r")
+    conteudo = registro.read()
+    print(conteudo)
+except:
+    registro = open("registro.txt","r")
     conteudo = registro.read()
     print(conteudo)
 
